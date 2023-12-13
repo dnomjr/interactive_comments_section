@@ -1,0 +1,83 @@
+/* * {
+    outline: 1.5008px solid red;
+} */
+
+.main-form-container {
+  max-width: 28.125rem;
+  margin: 0 auto;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--white);
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.main-input-form {
+  max-width: 26.125rem;
+  height: 6rem;
+  border-radius: 0.5rem;
+  grid-column: 1/3;
+  padding: 0.75rem 1.5rem;
+  border-color: var(--light-gray);
+  color: var(--dark-blue);
+}
+.main-input-form:focus {
+  outline: none !important;
+  border: 1px solid var(--moderate-blue);
+}
+
+.current-user-container {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.btn-send {
+  width: 6.5rem;
+  height: 3rem;
+  justify-self: end;
+  text-transform: uppercase;
+  background-color: var(--moderate-blue);
+  color: var(--white);
+  border-color: transparent;
+  border-radius: 0.5rem;
+  transition: 0.5s ease-in-out all;
+}
+
+.btn-send:hover {
+  cursor: pointer;
+  background-color: var(--light-grayish-blue);
+}
+
+.current-user {
+  width: 2rem;
+  height: 2rem;
+}
+
+@media (min-width: 64rem) {
+  .main-form-container {
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    max-width: 45.625rem;
+    padding: 1.5rem;
+  }
+
+  .main-input-form {
+    grid-column: 2;
+    max-width: 31.625rem;
+  }
+
+  .current-user-container {
+    grid-column: 1;
+    grid-row: 1;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .current-user {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
