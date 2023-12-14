@@ -1,21 +1,22 @@
 import Comments from "./components/comments/Comments"
 import Form from "./components/form/Form"
+import Modal from "./components/modal/Modal"
+
+import { ToastContainer } from "react-toastify"
+
+import "react-toastify/dist/ReactToastify.css"
 
 import "./app.css"
 
-import data from './constants/data.json'
-import { useState } from "react"
-
-
+import data from "./constants/data.json"
 
 function App() {
-
-  const [comments, setComments] = useState(data.comments)
-
   return (
     <main className="container">
-      <Comments comments={comments}/>
+      <ToastContainer />
+      <Comments comments={data.comments} />
       <Form />
+      <Modal />
     </main>
   )
 }

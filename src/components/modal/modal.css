@@ -1,0 +1,85 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+  visibility: hidden;
+  opacity: 0;
+}
+.show-modal {
+  z-index: 1;
+  visibility: visible;
+  opacity: 1;
+  transition-property: opacity;
+  transition-duration: 1.5s;
+}
+
+.modal-container {
+  width: 343px;
+  height: 224px;
+  background-color: var(--white);
+  padding: 24px 27px;
+  border-radius: 0.5rem;
+}
+
+.modal-container h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--dark-blue);
+}
+.modal-container p {
+  color: var(--grayish-blue);
+  margin: 10px 0 14px;
+}
+.cancel {
+  background-color: var(--grayish-blue);
+  color: var(--white);
+  text-transform: uppercase;
+  border-radius: 0.5rem;
+  border-color: transparent;
+  width: 138px;
+  height: 48px;
+  margin-right: 12px;
+  transition: 0.5s ease-in-out all;
+}
+.cancel:hover {
+  cursor: pointer;
+  background-color: hsla(211, 10%, 45%, 0.5);
+}
+.delete {
+  background-color: var(--soft-red);
+  color: var(--white);
+  text-transform: uppercase;
+  border-radius: 0.5rem;
+  border-color: transparent;
+  width: 138px;
+  height: 48px;
+  transition: 0.5s ease-in-out all;
+}
+.delete:hover {
+  cursor: pointer;
+  background-color: var(--pale-red);
+}
+
+@media (min-width: 64rem) {
+  .modal-container {
+    width: 400px;
+    height: 252px;
+    padding: 32px;
+  }
+  .cancel {
+    width: 161px;
+    height: 48px;
+    margin-right: 14px;
+  }
+
+  .delete {
+    width: 161px;
+    height: 48px;
+  }
+}

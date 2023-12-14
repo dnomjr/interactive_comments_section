@@ -2,16 +2,27 @@
 import "./comment.css"
 import { reply, minus, plus } from "../../assets/icons/index"
 import { useGlobalContext } from "../../context"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 
 const Comment = ({ comment }) => {
   const { id, content, createdAt, score, user } = comment
-  const { increaseScore, decreaseScore, comments, setComments, data } =
-    useGlobalContext()
+  const {
+    increaseScore,
+    decreaseScore,
+    comments,
+    setComments,
+    data,
+    showModal,
+    updateComment,
+  } = useGlobalContext()
   const [maxScore, setMaxScore] = useState(true)
   const [minScore, setMinScore] = useState(true)
   const [activeMaxScore, setActiveMaxScore] = useState(false)
   const [activeMinsScore, setActiveMinScore] = useState(false)
+  const [isEdit, setIsEdit] = useState(true)
+  const [value, setValue] = useState(content)
+
+  const refUpdate = useRef(null)
 
   /* increase score function */
   const increase = (newScore) => {
@@ -56,8 +67,22 @@ const Comment = ({ comment }) => {
     setActiveMinScore(true)
   }
 
+  /* edit input */
+  const showEdit = () => {
+    setIsEdit(false)
+  }
+
+  useEffect(() => {
+    if (!isEdit) {
+      refUpdate.current.focus()
+    }
+  }, [isEdit])
+
   return (
     <article className="comment">
+      {/***          ***/}
+      {/*    USER DATA   */}
+      {/***          ***/}
       <div className="comment-title">
         <img src={user.image.png} className="user-img"></img>
         <p className="user-name">{user.username}</p>
@@ -69,8 +94,32 @@ const Comment = ({ comment }) => {
         <p className="create-info">{createdAt}</p>
       </div>
 
-      <p className="comment-text">{content}</p>
+      {/***          ***/}
+      {/* TEXT / TEXTAREA */}
+      {/***          ***/}
+      {isEdit ? (
+        <p className="comment-text">{content}</p>
+      ) : (
+        <>
+          <textarea
+            type="text"
+            className="update-textarea"
+            value={value}
+            ref={refUpdate}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <button
+            className="btn-update"
+            onClick={() => updateComment(id, value, isEdit, setIsEdit)}
+          >
+            update
+          </button>
+        </>
+      )}
 
+      {/***          ***/}
+      {/*     SCORE     */}
+      {/***          ***/}
       <div className="score-btn">
         <img
           src={minus}
@@ -87,10 +136,17 @@ const Comment = ({ comment }) => {
         />
       </div>
 
+      {/***          ***/}
+      {/* REPLY / DELETE / EDIT */}
+      {/***          ***/}
       {user.username === data.currentUser.username ? (
-        <div className="edit-delete-btn">
-          <button className="delete-comment">delete</button>
-          <button className="edit-comment">edit</button>
+        <div className={!isEdit ? "hide-btns" : "edit-delete-btn"}>
+          <button className="delete-comment" onClick={() => showModal(id)}>
+            delete
+          </button>
+          <button className="edit-comment" onClick={showEdit}>
+            edit
+          </button>
         </div>
       ) : (
         <button className="reply-btn">
