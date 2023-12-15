@@ -1,0 +1,36 @@
+.reply-container {
+  border-left: 1px solid hsl(221, 24%, 85%);
+  border-width: 2px;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.reply {
+  background-color: var(--white);
+  width: 100%;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  display: grid;
+  padding: 16px;
+}
+
+.reply:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 64rem) {
+  .reply-container {
+    margin-left: 43px;
+    padding-left: 43px;
+    margin-bottom: 10px;
+  }
+  .reply {
+    margin-bottom: 24px;
+  }
+  .reply:first-child {
+    margin-top: 10px;
+  }
+}

@@ -3,6 +3,8 @@ import "./comment.css"
 import { reply, minus, plus } from "../../assets/icons/index"
 import { useGlobalContext } from "../../context"
 import { useState, useRef, useEffect } from "react"
+import Reply from "../reply/Reply"
+import Form from "../form/Form"
 
 const Comment = ({ comment }) => {
   const { id, content, createdAt, score, user } = comment
@@ -21,6 +23,7 @@ const Comment = ({ comment }) => {
   const [activeMinsScore, setActiveMinScore] = useState(false)
   const [isEdit, setIsEdit] = useState(true)
   const [value, setValue] = useState(content)
+  const [showReply, setShowReply] = useState(false)
 
   const refUpdate = useRef(null)
 
@@ -75,88 +78,105 @@ const Comment = ({ comment }) => {
   useEffect(() => {
     if (!isEdit) {
       refUpdate.current.focus()
+      refUpdate.current.setSelectionRange(value.length, value.length)
     }
-  }, [isEdit])
+  }, [isEdit, value.length])
 
   return (
-    <article className="comment">
-      {/***          ***/}
-      {/*    USER DATA   */}
-      {/***          ***/}
-      <div className="comment-title">
-        <img src={user.image.png} className="user-img"></img>
-        <p className="user-name">{user.username}</p>
+    <>
+      <article className="comment">
+        {/***          ***/}
+        {/*    USER DATA   */}
+        {/***          ***/}
+        <div className="comment-title">
+          <img src={user.image.png} className="user-img"></img>
+          <p className="user-name">{user.username}</p>
 
-        {user.username === data.currentUser.username && (
-          <div className="you">you</div>
+          {user.username === data.currentUser.username && (
+            <div className="you">you</div>
+          )}
+
+          <p className="create-info">{createdAt}</p>
+        </div>
+
+        {/***          ***/}
+        {/* TEXT / TEXTAREA */}
+        {/***          ***/}
+        {isEdit ? (
+          <p className="comment-text">{content}</p>
+        ) : (
+          <>
+            <textarea
+              type="text"
+              className="update-textarea"
+              value={value}
+              ref={refUpdate}
+              onChange={(e) => setValue(e.target.value)}
+            />
+            <button
+              className="btn-update"
+              onClick={() => updateComment(id, value, isEdit, setIsEdit)}
+            >
+              update
+            </button>
+          </>
         )}
 
-        <p className="create-info">{createdAt}</p>
-      </div>
-
-      {/***          ***/}
-      {/* TEXT / TEXTAREA */}
-      {/***          ***/}
-      {isEdit ? (
-        <p className="comment-text">{content}</p>
-      ) : (
-        <>
-          <textarea
-            type="text"
-            className="update-textarea"
-            value={value}
-            ref={refUpdate}
-            onChange={(e) => setValue(e.target.value)}
+        {/***          ***/}
+        {/*     SCORE     */}
+        {/***          ***/}
+        <div className="score-btn">
+          <img
+            src={minus}
+            alt=""
+            onClick={() => decreaseScore(score, decrease)}
+            className={activeMinsScore ? "active-score" : ""}
           />
-          <button
-            className="btn-update"
-            onClick={() => updateComment(id, value, isEdit, setIsEdit)}
-          >
-            update
-          </button>
-        </>
-      )}
-
-      {/***          ***/}
-      {/*     SCORE     */}
-      {/***          ***/}
-      <div className="score-btn">
-        <img
-          src={minus}
-          alt=""
-          onClick={() => decreaseScore(score, decrease)}
-          className={activeMinsScore ? "active-score" : ""}
-        />
-        <p>{score}</p>
-        <img
-          src={plus}
-          alt=""
-          onClick={() => increaseScore(score, increase)}
-          className={activeMaxScore ? "active-score" : ""}
-        />
-      </div>
-
-      {/***          ***/}
-      {/* REPLY / DELETE / EDIT */}
-      {/***          ***/}
-      {user.username === data.currentUser.username ? (
-        <div className={!isEdit ? "hide-btns" : "edit-delete-btn"}>
-          <button className="delete-comment" onClick={() => showModal(id)}>
-            delete
-          </button>
-          <button className="edit-comment" onClick={showEdit}>
-            edit
-          </button>
+          <p>{score}</p>
+          <img
+            src={plus}
+            alt=""
+            onClick={() => increaseScore(score, increase)}
+            className={activeMaxScore ? "active-score" : ""}
+          />
         </div>
+
+        {/***          ***/}
+        {/* REPLY / DELETE / EDIT */}
+        {/***          ***/}
+        {user.username === data.currentUser.username ? (
+          <div className={!isEdit ? "hide-btns" : "edit-delete-btn"}>
+            <button className="delete-comment" onClick={() => showModal(id)}>
+              delete
+            </button>
+            <button className="edit-comment" onClick={showEdit}>
+              edit
+            </button>
+          </div>
+        ) : (
+          <button className="reply-btn" onClick={() => setShowReply(!showReply)}>
+            <span>
+              <img src={reply} alt="" />
+              reply
+            </span>
+          </button>
+        )}
+      </article>
+
+      {
+        showReply &&  <Form />
+      }
+
+      {comment.replies.length ? (
+        <section className="reply-container">
+          {comment.replies.map((reply) => {
+            return <Reply key={reply.id} {...reply}/>
+          })}
+        </section>
       ) : (
-        <button className="reply-btn">
-          <span>
-            <img src={reply} alt="" />
-            reply
-          </span>
-        </button>
+        ""
       )}
-    </article>
+    </>
   )
 }
 export default Comment

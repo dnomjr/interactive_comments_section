@@ -3,7 +3,6 @@ import { useState } from "react"
 import { useGlobalContext } from "../../context"
 import "./comments.css"
 import Comment from "../comment/Comment"
-import Reply from "../reply/Reply"
 
 const Comments = () => {
   const { comments } = useGlobalContext()
@@ -13,13 +12,9 @@ const Comments = () => {
     <section className="comments-container">
       {comments.map((comment) => {
         return (
-          <div key={comment.id}>
-            <Comment comment={comment} />
-
-            {comment.replies.map((reply) => {
-              return <Reply key={reply.id}/>
-            })}
-          </div>
+          <>
+            <Comment key={comment.id} comment={comment} />
+          </>
         )
       })}
     </section>
