@@ -11,11 +11,7 @@ const Comments = () => {
   return (
     <section className="comments-container">
       {comments.map((comment) => {
-        return (
-          <>
-            <Comment key={comment.id} comment={comment} />
-          </>
-        )
+        return <Comment key={comment.id} comment={comment} />
       })}
     </section>
   )

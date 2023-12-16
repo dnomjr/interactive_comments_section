@@ -4,7 +4,7 @@ import { reply, minus, plus } from "../../assets/icons/index"
 import { useGlobalContext } from "../../context"
 import { useState, useRef, useEffect } from "react"
 import Reply from "../reply/Reply"
-import Form from "../form/Form"
+import ReplyForm from "../reply-form/ReplyForm"
 
 const Comment = ({ comment }) => {
   const { id, content, createdAt, score, user } = comment
@@ -82,6 +82,9 @@ const Comment = ({ comment }) => {
     }
   }, [isEdit, value.length])
 
+  const handleReply = () => {
+    setShowReply(!showReply)
+  }
   return (
     <>
       <article className="comment">
@@ -154,7 +157,7 @@ const Comment = ({ comment }) => {
             </button>
           </div>
         ) : (
-          <button className="reply-btn" onClick={() => setShowReply(!showReply)}>
+          <button className="reply-btn" onClick={handleReply}>
             <span>
               <img src={reply} alt="" />
               reply
@@ -163,14 +166,17 @@ const Comment = ({ comment }) => {
         )}
       </article>
 
-      {
-        showReply &&  <Form />
-      }
+      <ReplyForm
+        showReply={showReply}
+        setShowReply={setShowReply}
+        username={user.username}
+        id={id}
+      />
 
       {comment.replies.length ? (
         <section className="reply-container">
           {comment.replies.map((reply) => {
-            return <Reply key={reply.id} {...reply}/>
+            return <Reply key={reply.id} {...reply} idComment={id} />
           })}
         </section>
       ) : (

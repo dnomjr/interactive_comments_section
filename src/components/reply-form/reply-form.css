@@ -1,21 +1,20 @@
-/* * {
-    outline: 1.5008px solid red;
-} */
-
-.main-form-container {
-  max-width: 28.125rem;
-  margin: 0 auto;
+.reply-input-container {
+  transition: 1.5s ease-in-out opacity, 0.5s ease-in-out height;
+  overflow: hidden;
+  opacity: 0;
+}
+.reply-input {
+  width: 100%;
   border-radius: 0.5rem;
   background-color: var(--white);
-  padding: 1rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   align-items: center;
-  margin-top: 16px;
+  padding: 1rem;
 }
 
-.main-input-form {
+.reply-textarea {
   max-width: 26.125rem;
   height: 6rem;
   border-radius: 0.5rem;
@@ -26,7 +25,7 @@
   resize: none;
   border-style: solid;
 }
-.main-input-form:focus {
+.reply-textarea:focus {
   outline: none !important;
   border: 1px solid var(--moderate-blue);
 }
@@ -60,15 +59,14 @@
 }
 
 @media (min-width: 64rem) {
-  .main-form-container {
+  .reply-input {
     grid-template-columns: auto 1fr auto;
     align-items: start;
     max-width: 40.125rem;
     padding: 1.5rem;
-    margin-top: 20px;
   }
 
-  .main-input-form {
+  .reply-textarea {
     grid-column: 2;
     max-width: 31.625rem;
   }

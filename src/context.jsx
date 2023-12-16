@@ -76,6 +76,23 @@ export const AppProvider = ({ children }) => {
     setComments(updateComments)
     setIsEdit(!isEdit)
   }
+  /* *****            *****  */
+  /* *** ADD REPLY *** */
+  /* *****            *****  */
+  const addReply = (reply, id, setShowReply) => {
+    let findComment = comments.find((c) => {
+      return c.id === id
+    })
+    let addReply = [...findComment.replies, reply]
+    let updateReply = { ...findComment, replies: addReply }
+    let updateComment = comments.map((c) => {
+      return c.id === id ? updateReply : c
+    })
+
+    setComments(updateComment)
+    setShowReply(false)
+    console.log(updateReply)
+  }
 
   return (
     <AppContext.Provider
@@ -90,6 +107,7 @@ export const AppProvider = ({ children }) => {
         showModal,
         deleteComment,
         updateComment,
+        addReply,
       }}
     >
       {children}

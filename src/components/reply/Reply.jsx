@@ -3,11 +3,50 @@ import "./reply.css"
 import data from "../../constants/data.json"
 import { useState } from "react"
 import { reply, minus, plus } from "../../assets/icons/index"
+import { useGlobalContext } from "../../context"
+import { increaseScore, decreaseScore } from "../../utils/count-score"
 
-const Reply = ({ user, createdAt, content, score}) => {
+const Reply = ({ user, createdAt, content, score, id, idComment }) => {
   const [isEdit, setIsEdit] = useState(true)
   const [activeMaxScore, setActiveMaxScore] = useState(false)
   const [activeMinsScore, setActiveMinScore] = useState(false)
+  const [maxScore, setMaxScore] = useState(true)
+  const [minScore, setMinScore] = useState(true)
+
+  const { comments, setComments, data } = useGlobalContext()
+
+  /* increase score function */
+  const increase = () => {
+    increaseScore(
+      comments,
+      idComment,
+      id,
+      maxScore,
+      setComments,
+      minScore,
+      setMaxScore,
+      setMinScore,
+      setActiveMaxScore,
+      setActiveMinScore,
+      score
+    )
+  }
+  /* increase score function */
+  const decrease = () => {
+    decreaseScore(
+      comments,
+      idComment,
+      id,
+      maxScore,
+      setComments,
+      minScore,
+      setMaxScore,
+      setMinScore,
+      setActiveMaxScore,
+      setActiveMinScore,
+      score
+    )
+  }
 
   return (
     <div className="reply ">
@@ -43,14 +82,14 @@ const Reply = ({ user, createdAt, content, score}) => {
         <img
           src={minus}
           alt=""
-          onClick={() => ""}
+          onClick={decrease}
           className={activeMinsScore ? "active-score" : ""}
         />
         <p>{score}</p>
         <img
           src={plus}
           alt=""
-          onClick={() => ""}
+          onClick={increase}
           className={activeMaxScore ? "active-score" : ""}
         />
       </div>
@@ -60,7 +99,7 @@ const Reply = ({ user, createdAt, content, score}) => {
       {/***          ***/}
       {user.username === data.currentUser.username ? (
         <div className={!isEdit ? "hide-btns" : "edit-delete-btn"}>
-          <button className="delete-comment" onClick={() => ("")}>
+          <button className="delete-comment" onClick={() => ""}>
             delete
           </button>
           <button className="edit-comment" onClick={""}>

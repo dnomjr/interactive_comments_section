@@ -6,7 +6,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  margin-bottom: 16px;
 }
 
 .comment:last-child {
@@ -188,7 +187,7 @@
     grid-template-columns: auto 1fr 1fr;
     align-items: normal;
     padding: 24px;
-    margin: 10px 0;
+    
   }
   .comment-title {
     grid-column: 2/4;

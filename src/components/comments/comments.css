@@ -3,6 +3,8 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  position: relative;
+  row-gap: 8px;
 }
 
 @media (min-width: 64rem) {
