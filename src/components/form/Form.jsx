@@ -44,7 +44,7 @@ const Form = () => {
       <div className="current-user-container">
         <img src={user.currentUser.image.png} alt="" className="current-user" />
       </div>
-      <button className="btn-send ">seeeend</button>
+      <button className="btn-send ">send</button>
     </form>
   )
 }
