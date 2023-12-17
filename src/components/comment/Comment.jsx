@@ -81,6 +81,7 @@ const Comment = ({ comment }) => {
       refUpdate.current.focus()
       refUpdate.current.setSelectionRange(value.length, value.length)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit])
 
   const handleReply = () => {
@@ -152,7 +153,10 @@ const Comment = ({ comment }) => {
         {/***          ***/}
         {user.username === data.currentUser.username ? (
           <div className={!isEdit ? "hide-btns" : "edit-delete-btn"}>
-            <button className="delete-comment" onClick={() => showModal(id)}>
+            <button
+              className="delete-comment"
+              onClick={() => showModal(id, idComment)}
+            >
               delete
             </button>
             <button className="edit-comment" onClick={showEdit}>

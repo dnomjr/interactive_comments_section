@@ -14,7 +14,6 @@ export const AppProvider = ({ children }) => {
   const [isActiveModal, setIsActiveModal] = useState(false)
   const [deleteId, setDeleteId] = useState("")
   const [idComment, setIdComment] = useState()
-  const [idReply, setIdReply] = useState()
 
   /* *****            *****  */
   /* *** ADD NEW COMMENT *** */
@@ -79,26 +78,27 @@ export const AppProvider = ({ children }) => {
         progress: undefined,
         theme: "light",
       })
+    } else {
+      let deleteReply = findComment.replies.filter((c) => {
+        return c.id !== deleteId
+      })
+      let updateComment = { ...findComment, replies: deleteReply }
+      let updateComments = comments.map((comment) => {
+        return comment.id === idComment ? updateComment : comment
+      })
+      setComments(updateComments)
+      setIsActiveModal(!isActiveModal)
+      toast.error("Comment successfully removed!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
     }
-    let deleteReply = findComment.replies.filter((c) => {
-      return c.id !== deleteId
-    })
-    let updateComment = { ...findComment, replies: deleteReply }
-    let updateComments = comments.map((comment) => {
-      return comment.id === idComment ? updateComment : comment
-    })
-    setComments(updateComments)
-    setIsActiveModal(!isActiveModal)
-    toast.error("Comment successfully removed!", {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    })
   }
   /* *****            *****  */
   /* *** UPDATE COMMENT *** */
@@ -150,16 +150,16 @@ export const AppProvider = ({ children }) => {
       setComments(updateComment)
       setShowReply(false)
     }
-        toast.success("Reply successfully added!", {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        })
+    toast.success("Reply successfully added!", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
   }
 
   return (

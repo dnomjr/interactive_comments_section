@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import "./reply.css"
-import data from "../../constants/data.json"
 import { useState, useRef, useEffect } from "react"
 import { reply, minus, plus } from "../../assets/icons/index"
 import { useGlobalContext } from "../../context"
@@ -58,6 +57,7 @@ const Reply = ({ user, createdAt, content, score, id, idComment }) => {
       refUpdate.current.focus()
       refUpdate.current.setSelectionRange(value.length, value.length)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit])
 
   return (
