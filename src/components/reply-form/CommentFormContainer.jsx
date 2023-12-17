@@ -4,9 +4,16 @@ import { nanoid } from "nanoid"
 import user from "../../constants/data.json"
 import { useState, useRef, useEffect } from "react"
 import { useGlobalContext } from "../../context"
+import EditForm from "./EditComment"
 
-const ReplyForm = ({ showReply, setShowReply, username, id }) => {
-  const [value, setValue] = useState("")
+const CommentFormContainer = ({
+  showReply,
+  setShowReply,
+  username,
+  id,
+  idComment,
+}) => {
+  const [value, setValue] = useState("@"+username+" ")
   const { data, addReply } = useGlobalContext()
   const refTextarea = useRef(null)
   const refForm = useRef(null)
@@ -27,19 +34,19 @@ const ReplyForm = ({ showReply, setShowReply, username, id }) => {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    value.trim() == "" ? null : addReply(reply, id, setShowReply)
+    value.trim() == "" ? null : addReply(reply, id, setShowReply, idComment)
     setValue("")
     refTextarea.current.focus()
-    /*     setShowReply(!showReply)
-     */
   }
 
   useEffect(() => {
     if (showReply) {
       refTextarea.current.focus()
-      refTextarea.current.setSelectionRange(value.length, value.length)
+      /* refTextarea.current.setSelectionRange(value.length, value.length) */
+      refTextarea.current.selectionStart = value.length
     }
-  }, [showReply, value.length])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showReply])
 
   const containerStyles = {
     height: showReply
@@ -49,27 +56,15 @@ const ReplyForm = ({ showReply, setShowReply, username, id }) => {
   }
 
   return (
-    <section className="reply-input-container" style={containerStyles}>
-      <form className="reply-input" onSubmit={handleSubmit} ref={refForm}>
-        <textarea
-          type="text"
-          placeholder="Add a comment..."
-          className="reply-textarea"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          ref={refTextarea}
-          autoFocus
-        />
-        <div className="current-user-container">
-          <img
-            src={user.currentUser.image.png}
-            alt=""
-            className="current-user"
-          />
-        </div>
-        <button className="btn-send">reply</button>
-      </form>
-    </section>
+    <EditForm
+      containerStyles={containerStyles}
+      handleSubmit={handleSubmit}
+      refForm={refForm}
+      value={value}
+      setValue={setValue}
+      refTextarea={refTextarea}
+      user={user}
+    />
   )
 }
-export default ReplyForm
+export default CommentFormContainer

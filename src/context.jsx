@@ -13,6 +13,8 @@ export const AppProvider = ({ children }) => {
   const [comments, setComments] = useState(data.comments)
   const [isActiveModal, setIsActiveModal] = useState(false)
   const [deleteId, setDeleteId] = useState("")
+  const [idComment, setIdComment] = useState()
+  const [idReply, setIdReply] = useState()
 
   /* *****            *****  */
   /* *** ADD NEW COMMENT *** */
@@ -20,6 +22,17 @@ export const AppProvider = ({ children }) => {
   const addComment = (comment) => {
     let newComment = [...comments, comment]
     setComments(newComment)
+
+    toast.success("Comment successfully added!", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
   }
   /* *****            *****  */
   /* *** INCREASE SCORE *** */
@@ -38,22 +51,47 @@ export const AppProvider = ({ children }) => {
   /* *****            *****  */
   /* *** SHOW DELETE MODAL *** */
   /* *****            *****  */
-  const showModal = (id) => {
+  const showModal = (id, idComment) => {
     setIsActiveModal(!isActiveModal)
     setDeleteId(id)
+    setIdComment(idComment)
   }
   /* *****            *****  */
-  /* *** DELETE COMMENT *** */
+  /* *** DELETE COMMENT & REPLY *** */
   /* *****            *****  */
   const deleteComment = () => {
-    const filterComments = comments.filter((c) => {
+    let findComment = comments.find((c) => {
+      return c.id === idComment
+    })
+    if (findComment.id === deleteId) {
+      const filterComments = comments.filter((c) => {
+        return c.id !== deleteId
+      })
+      setComments(filterComments)
+      setIsActiveModal(!isActiveModal)
+      toast.error("Comment successfully removed!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    }
+    let deleteReply = findComment.replies.filter((c) => {
       return c.id !== deleteId
     })
-    setComments(filterComments)
+    let updateComment = { ...findComment, replies: deleteReply }
+    let updateComments = comments.map((comment) => {
+      return comment.id === idComment ? updateComment : comment
+    })
+    setComments(updateComments)
     setIsActiveModal(!isActiveModal)
     toast.error("Comment successfully removed!", {
       position: "top-center",
-      autoClose: 3000,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -65,33 +103,63 @@ export const AppProvider = ({ children }) => {
   /* *****            *****  */
   /* *** UPDATE COMMENT *** */
   /* *****            *****  */
-  const updateComment = (id, text, isEdit, setIsEdit) => {
-    const findComment = comments.find((c) => {
-      return c.id === id
-    })
-    const changeComment = { ...findComment, content: text }
-    const updateComments = comments.map((c) => {
-      return c.id === id ? changeComment : c
-    })
-    setComments(updateComments)
-    setIsEdit(!isEdit)
+  const updateComment = (id, text, isEdit, setIsEdit, idComment) => {
+    if (id !== idComment) {
+      let findComment = comments.find((c) => {
+        return c.id === idComment
+      })
+      let findReply = findComment.replies.find((reply) => {
+        return reply.id === id
+      })
+      let changeContent = { ...findReply, content: text }
+      let updateReplies = findComment.replies.map((reply) => {
+        return reply.id === id ? changeContent : reply
+      })
+      let updateComment = { ...findComment, replies: updateReplies }
+      let updateComments = comments.map((c) => {
+        return c.id === idComment ? updateComment : c
+      })
+      setComments(updateComments)
+      setIsEdit(!isEdit)
+    } else {
+      const findComment = comments.find((c) => {
+        return c.id === id
+      })
+      const changeComment = { ...findComment, content: text }
+      const updateComments = comments.map((c) => {
+        return c.id === id ? changeComment : c
+      })
+      setComments(updateComments)
+      setIsEdit(!isEdit)
+    }
   }
   /* *****            *****  */
   /* *** ADD REPLY *** */
   /* *****            *****  */
-  const addReply = (reply, id, setShowReply) => {
+  const addReply = (reply, id, setShowReply, idComment) => {
     let findComment = comments.find((c) => {
-      return c.id === id
+      return idComment === c.id
     })
-    let addReply = [...findComment.replies, reply]
-    let updateReply = { ...findComment, replies: addReply }
-    let updateComment = comments.map((c) => {
-      return c.id === id ? updateReply : c
-    })
+    if (findComment.id === idComment) {
+      let addReply = [...findComment.replies, reply]
+      let updateReply = { ...findComment, replies: addReply }
+      let updateComment = comments.map((c) => {
+        return c.id === idComment ? updateReply : c
+      })
 
-    setComments(updateComment)
-    setShowReply(false)
-    console.log(updateReply)
+      setComments(updateComment)
+      setShowReply(false)
+    }
+        toast.success("Reply successfully added!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
   }
 
   return (

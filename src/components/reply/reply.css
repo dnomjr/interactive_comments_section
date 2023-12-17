@@ -11,27 +11,37 @@
 .reply {
   background-color: var(--white);
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   border-radius: 8px;
   display: grid;
   padding: 16px;
+  margin-top: 8px;
 }
 
 
 .reply:last-child {
   margin-bottom: 0;
 }
+.update-textarea {
+  resize: none;
+  line-height: 1.5;
+}
 
 @media (min-width: 64rem) {
   .reply-container {
     margin-left: 43px;
     padding-left: 43px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .reply {
-    margin-bottom: 24px;
+    margin-bottom: 8px;
+    grid-template-columns: auto 1fr auto;
+  }
+  .reply:last-of-type {
+    margin-bottom: 0;
   }
   .reply:first-child {
     margin-top: 0
   }
+ 
 }

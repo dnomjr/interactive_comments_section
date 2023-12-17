@@ -2,6 +2,7 @@
   transition: 1.5s ease-in-out opacity, 0.5s ease-in-out height;
   overflow: hidden;
   opacity: 0;
+  width: 100%;
 }
 .reply-input {
   width: 100%;
@@ -12,6 +13,7 @@
   gap: 1rem;
   align-items: center;
   padding: 1rem;
+  margin-top: 8px;
 }
 
 .reply-textarea {
@@ -80,5 +82,8 @@
   .current-user {
     width: 2.5rem;
     height: 2.5rem;
+  }
+  .comment-title {
+
   }
 }

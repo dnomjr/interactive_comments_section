@@ -4,7 +4,7 @@ import { reply, minus, plus } from "../../assets/icons/index"
 import { useGlobalContext } from "../../context"
 import { useState, useRef, useEffect } from "react"
 import Reply from "../reply/Reply"
-import ReplyForm from "../reply-form/ReplyForm"
+import CommentFormContainer from "../reply-form/CommentFormContainer"
 
 const Comment = ({ comment }) => {
   const { id, content, createdAt, score, user } = comment
@@ -26,6 +26,7 @@ const Comment = ({ comment }) => {
   const [showReply, setShowReply] = useState(false)
 
   const refUpdate = useRef(null)
+  const idComment = id
 
   /* increase score function */
   const increase = (newScore) => {
@@ -80,7 +81,7 @@ const Comment = ({ comment }) => {
       refUpdate.current.focus()
       refUpdate.current.setSelectionRange(value.length, value.length)
     }
-  }, [isEdit, value.length])
+  }, [isEdit])
 
   const handleReply = () => {
     setShowReply(!showReply)
@@ -118,7 +119,9 @@ const Comment = ({ comment }) => {
             />
             <button
               className="btn-update"
-              onClick={() => updateComment(id, value, isEdit, setIsEdit)}
+              onClick={() =>
+                updateComment(id, value, isEdit, setIsEdit, idComment)
+              }
             >
               update
             </button>
@@ -166,11 +169,12 @@ const Comment = ({ comment }) => {
         )}
       </article>
 
-      <ReplyForm
+      <CommentFormContainer
         showReply={showReply}
         setShowReply={setShowReply}
         username={user.username}
         id={id}
+        idComment={id}
       />
 
       {comment.replies.length ? (
