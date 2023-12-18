@@ -6,7 +6,15 @@ import { useGlobalContext } from "../../context"
 import { increaseScore, decreaseScore } from "../../utils/count-score"
 import ReplyFormContainer from "../reply-form/ReplyFormContainer"
 
-const Reply = ({ user, createdAt, content, score, id, idComment }) => {
+const Reply = ({
+  user,
+  createdAt,
+  content,
+  score,
+  id,
+  idComment,
+  replyingTo,
+}) => {
   const [isEdit, setIsEdit] = useState(true)
   const [activeMaxScore, setActiveMaxScore] = useState(false)
   const [activeMinsScore, setActiveMinScore] = useState(false)
@@ -14,10 +22,12 @@ const Reply = ({ user, createdAt, content, score, id, idComment }) => {
   const [minScore, setMinScore] = useState(true)
   const [showReply, setShowReply] = useState(false)
   const [value, setValue] = useState(content)
+  const [indent, setIndent] = useState()
 
   const { comments, setComments, data, showModal, updateComment } =
     useGlobalContext()
   const refUpdate = useRef(null)
+  const refReplyName = useRef(null)
 
   /* increase score function */
   const increase = () => {
@@ -57,8 +67,13 @@ const Reply = ({ user, createdAt, content, score, id, idComment }) => {
       refUpdate.current.focus()
       refUpdate.current.setSelectionRange(value.length, value.length)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit])
+
+  useEffect(() => {
+    setIndent(refReplyName.current.getBoundingClientRect().width + 10 + "px")
+  }, [])
 
   return (
     <>
@@ -78,15 +93,26 @@ const Reply = ({ user, createdAt, content, score, id, idComment }) => {
         {/* TEXT / TEXTAREA */}
         {/***          ***/}
         {isEdit ? (
-          <p className="comment-text">{content}</p>
+          <>
+            <span className="reply-to" ref={refReplyName}>
+              {replyingTo}
+            </span>
+            <p className="comment-text" style={{ textIndent: indent }}>
+              {content}
+            </p>
+          </>
         ) : (
           <>
+            <span className="reply-to-edit" ref={refReplyName}>
+              {replyingTo}
+            </span>
             <textarea
               type="text"
               className="update-textarea"
               value={value}
               ref={refUpdate}
               onChange={(e) => setValue(e.target.value)}
+              style={{ textIndent: indent }}
             />
             <button
               className="btn-update"

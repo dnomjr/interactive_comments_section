@@ -104,7 +104,7 @@ export const AppProvider = ({ children }) => {
   /* *** UPDATE COMMENT *** */
   /* *****            *****  */
   const updateComment = (id, text, isEdit, setIsEdit, idComment) => {
-    if (id !== idComment) {
+    if (id !== idComment && text.trim()) {
       let findComment = comments.find((c) => {
         return c.id === idComment
       })
@@ -122,15 +122,17 @@ export const AppProvider = ({ children }) => {
       setComments(updateComments)
       setIsEdit(!isEdit)
     } else {
-      const findComment = comments.find((c) => {
-        return c.id === id
-      })
-      const changeComment = { ...findComment, content: text }
-      const updateComments = comments.map((c) => {
-        return c.id === id ? changeComment : c
-      })
-      setComments(updateComments)
-      setIsEdit(!isEdit)
+      if (text.trim()) {
+        const findComment = comments.find((c) => {
+          return c.id === id
+        })
+        const changeComment = { ...findComment, content: text }
+        const updateComments = comments.map((c) => {
+          return c.id === id ? changeComment : c
+        })
+        setComments(updateComments)
+        setIsEdit(!isEdit)
+      }
     }
   }
   /* *****            *****  */

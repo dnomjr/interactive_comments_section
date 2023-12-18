@@ -4,7 +4,7 @@ import { nanoid } from "nanoid"
 import user from "../../constants/data.json"
 import { useState, useRef, useEffect } from "react"
 import { useGlobalContext } from "../../context"
-import EditForm from "./EditComment"
+import EditComment from "./EditComment"
 
 const CommentFormContainer = ({
   showReply,
@@ -12,15 +12,18 @@ const CommentFormContainer = ({
   username,
   id,
   idComment,
+  name,
+  setName,
 }) => {
-  const [value, setValue] = useState("@"+username+" ")
+  const [value, setValue] = useState("@" + username + " ")
   const { data, addReply } = useGlobalContext()
   const refTextarea = useRef(null)
   const refForm = useRef(null)
+  const refName = useRef(null)
 
   const reply = {
     id: nanoid(),
-    content: value,
+    content: name,
     createdAt: "today",
     score: 0,
     replyingTo: username,
@@ -34,8 +37,8 @@ const CommentFormContainer = ({
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    value.trim() == "" ? null : addReply(reply, id, setShowReply, idComment)
-    setValue("")
+    name.trim() == "" ? null : addReply(reply, id, setShowReply, idComment)
+    setName("")
     refTextarea.current.focus()
   }
 
@@ -43,9 +46,10 @@ const CommentFormContainer = ({
     if (showReply) {
       refTextarea.current.focus()
       /* refTextarea.current.setSelectionRange(value.length, value.length) */
-      refTextarea.current.selectionStart = value.length
+      refTextarea.current.selectionStart = name.length
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showReply])
 
   const containerStyles = {
@@ -55,8 +59,17 @@ const CommentFormContainer = ({
     opacity: showReply ? 1 : 0,
   }
 
+  const nameStyles = {
+    textIndent:
+      showReply && refName.current.getBoundingClientRect().width + 5 + "px",
+  }
+
+  const spanStyles = {
+    visibility: showReply ? "visible" : "hidden",
+  }
+
   return (
-    <EditForm
+    <EditComment
       containerStyles={containerStyles}
       handleSubmit={handleSubmit}
       refForm={refForm}
@@ -64,6 +77,12 @@ const CommentFormContainer = ({
       setValue={setValue}
       refTextarea={refTextarea}
       user={user}
+      name={name}
+      setName={setName}
+      username={username}
+      refName={refName}
+      nameStyles={nameStyles}
+      spanStyles={spanStyles}
     />
   )
 }

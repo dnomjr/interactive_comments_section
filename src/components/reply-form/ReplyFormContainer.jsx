@@ -4,7 +4,7 @@ import { nanoid } from "nanoid"
 import user from "../../constants/data.json"
 import { useState, useRef, useEffect } from "react"
 import { useGlobalContext } from "../../context"
-import EditForm from "./EditComment"
+import EditComment from "./EditComment"
 
 const ReplyFormContainer = ({
   showReply,
@@ -17,6 +17,7 @@ const ReplyFormContainer = ({
   const { data, addReply } = useGlobalContext()
   const refTextarea = useRef(null)
   const refForm = useRef(null)
+  const refName = useRef(null)
 
   const reply = {
     id: nanoid(),
@@ -53,15 +54,28 @@ const ReplyFormContainer = ({
     opacity: showReply ? 1 : 0,
   }
 
+  const nameStyles = {
+    textIndent:
+      showReply && refName.current.getBoundingClientRect().width + 5 + "px",
+  }
+
+  const spanStyles = {
+    visibility: showReply ? "visible" : "hidden",
+  }
+
   return (
-    <EditForm
+    <EditComment
       containerStyles={containerStyles}
       handleSubmit={handleSubmit}
       refForm={refForm}
-      value={value}
-      setValue={setValue}
+      name={value}
+      setName={setValue}
       refTextarea={refTextarea}
       user={user}
+      username={username}
+      refName={refName}
+      nameStyles={nameStyles}
+      spanStyles={spanStyles}
     />
   )
 }

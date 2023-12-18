@@ -24,6 +24,7 @@ const Comment = ({ comment }) => {
   const [isEdit, setIsEdit] = useState(true)
   const [value, setValue] = useState(content)
   const [showReply, setShowReply] = useState(false)
+  const [name, setName] = useState("")
 
   const refUpdate = useRef(null)
   const idComment = id
@@ -86,6 +87,8 @@ const Comment = ({ comment }) => {
 
   const handleReply = () => {
     setShowReply(!showReply)
+    setName("")
+    
   }
   return (
     <>
@@ -179,6 +182,8 @@ const Comment = ({ comment }) => {
         username={user.username}
         id={id}
         idComment={id}
+        name={name}
+        setName={setName}
       />
 
       {comment.replies.length ? (
